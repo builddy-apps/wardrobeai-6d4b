@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StyleMuse - Sign In</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50: '#fdf2f8',
+              100: '#fce7f3',
+              200: '#fbcfe8',
+              300: '#f9a8d4',
+              400: '#f472b6',
+              500: '#ec4899',
+              600: '#db2777',
+              700: '#be185d',
+              800: '#9d174d',
+              900: '#831843',
+              950: '#500724'
+            },
+            accent: {
+              50: '#fffbeb',
+              100: '#fef3c7',
+              200: '#fde68a',
+              300: '#fcd34d',
+              400: '#fbbf24',
+              500: '#f59e0b',
+              600: '#d97706',
+              700: '#b45309',
+              800: '#92400e',
+              900: '#78350f',
+              950: '#451a03'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @keyframes fade-in {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes scale-in {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    @keyframes slide-up {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
+      20%, 40%, 60%, 80% { transform: translateX(4px); }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    .animate-fade-in { animation: fade-in 0.5s ease-out forwards; }
+    .animate-scale-in { animation: scale-in 0.3s ease-out forwards; }
+    .animate-slide-up { animation: slide-up 0.4s ease-out forwards; }
+    .animate-shake { animation: shake 0.5s ease-in-out; }
+    .animate-float { animation: float 6s ease-in-out infinite; }
+    .stagger-1 { animation-delay: 0.1s; opacity: 0; }
+    .stagger-2 { animation-delay: 0.2s; opacity: 0; }
+    .stagger-3 { animation-delay: 0.3s; opacity: 0; }
+    .stagger-4 { animation-delay: 0.4s; opacity: 0; }
+    .gradient-bg {
+      background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 25%, #fff7ed 50%, #fef3c7 75%, #fdf2f8 100%);
+    }
+    .dark .gradient-bg {
+      background: linear-gradient(135deg, #1c1917 0%, #292524 25%, #1c1917 50%, #292524 75%, #1c1917 100%);
+    }
+  </style>
+</head>
+<body class="min-h-screen gradient-bg dark:from-slate-950 transition-colors duration-300">
+  <!-- Background decorations -->
+  <div class="fixed inset-0 overflow-hidden pointer-events-none">
+    <div class="absolute -top-40 -right-40 w-80 h-80 bg-primary-300/30 dark:bg-primary-600/10 rounded-full blur-3xl animate-float"></div>
+    <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-accent-300/30 dark:bg-accent-600/10 rounded-full blur-3xl animate-float" style="animation-delay: -3s;"></div>
+  </div>
+
+  <!-- Main container -->
+  <div class="relative min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-md">
+      <!-- Logo -->
+      <div class="text-center mb-8 animate-fade-in">
+        <a href="index.html" class="inline-flex items-center gap-2">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center shadow-lg">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+            </svg>
+          </div>
+          <span class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">StyleMuse</span>
+        </a>
+        <p class="text-slate-500 dark:text-slate-400 mt-2">Your AI-powered styling assistant</p>
+      </div>
+
+      <!-- Auth Card -->
+      <div class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-800/50 overflow-hidden animate-scale-in">
+        <!-- Tab Toggle -->
+        <div class="flex border-b border-slate-200 dark:border-slate-800">
+          <button id="tab-login" onclick="switchTab('login')" class="flex-1 py-4 text-sm font-medium text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-950/50 border-b-2 border-primary-500 transition-all">
+            Sign In
+          </button>
+          <button id="tab-signup" onclick="switchTab('signup')" class="flex-1 py-4 text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 transition-all">
+            Sign Up
+          </button>
+        </div>
+
+        <!-- Form -->
+        <form id="auth-form" class="p-6 sm:p-8 space-y-5" onsubmit="handleSubmit(event)">
+          <!-- Name field (signup only) -->
+          <div id="name-field" class="hidden space-y-1.5">
+            <label for="name" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Full Name</label>
+            <div class="relative">
+              <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+              </svg>
+              <input type="text" id="name" name="name" placeholder="John Doe" class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-shadow" />
+            </div>
+            <p class="text-xs text-red-500 hidden" id="name-error">Please enter your name</p>
+          </div>
+
+          <!-- Email field -->
+          <div class="space-y-1.5">
+            <label for="email" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Email Address</label>
+            <div class="relative">
+              <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+              </svg>
+              <input type="email" id="email" name="email" placeholder="you@example.com" required class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-shadow" />
+            </div>
+            <p class="text-xs text-red-500 hidden" id="email-error">Please enter a valid email address</p>
+          </div>
+
+          <!-- Password field -->
+          <div class="space-y-1.5">
+            <label for="password" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Password</label>
+            <div class="relative">
+              <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+              </svg>
+              <input type="password" id="password" name="password" placeholder="••••••••" required minlength="6" class="w-full pl-10 pr-12 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-shadow" />
+              <button type="button" onclick="togglePassword()" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors" aria-label="Toggle password visibility">
+                <svg id="eye-open" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                </svg>
+                <svg id="eye-closed" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/>
+                </svg>
+              </button>
+            </div>
+            <p class="text-xs text-red-500 hidden" id="password-error">Password must be at least 6 characters</p>
+          </div>
+
+          <!-- Remember me & Forgot password (login only) -->
+          <div id="login-extras" class="flex items-center justify-between">
+            <label class="flex items-center gap-2 cursor-pointer group">
+              <input type="checkbox" id="remember" class="w-4 h-4 rounded border-slate-300 dark:border-slate-700 text-primary-600 focus:ring-primary-500 focus:ring-offset-0 cursor-pointer" />
+              <span class="text-sm text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-slate-200 transition-colors">Remember me</span>
+            </label>
+            <button type="button" onclick="showForgotPassword()" class="text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium transition-colors">
+              Forgot password?
+            </button>
+          </div>
+
+          <!-- Error message -->
+          <div id="error-message" class="hidden p-3 rounded-xl bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-900">
+            <div class="flex items-center gap-2 text-red-600 dark:text-red-400">
+              <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              <span class="text-sm font-medium" id="error-text">Error message</span>
+            </div>
+          </div>
+
+          <!-- Submit button -->
+          <button type="submit" id="submit-btn" class="w-full py-3 px-4 bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-700 hover:to-primary-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 active:scale-[0.98] flex items-center justify-center gap-2">
+            <span id="btn-text">Sign In</span>
+            <svg id="btn-spinner" class="hidden w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+          </button>
+        </form>
+
+        <!-- Divider -->
+        <div class="px-6 sm:px-8 pb-6">
+          <div class="relative">
+            <div class="absolute inset-0 flex items-center">
+              <div class="w-full border-t border-slate-200 dark:border-slate-700"></div>
+            </div>
+            <div class="relative flex justify-center text-sm">
+              <span class="px-4 bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-400">Or continue with</span>
+            </div>
+          </div>
+
+          <!-- Social login buttons -->
+          <div class="mt-4 grid grid-cols-2 gap-3">
+            <button type="button" class="flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium hover:bg-slate-50 dark:hover:bg-slate-700 hover:border-slate-400 dark:hover:border-slate-600 transition-all active:scale-[0.98]">
+              <svg class="w-5 h-5" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+              </svg>
+              <span>Google</span>
+            </button>
+            <button type="button" class="flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium hover:bg-slate-50 dark:hover:bg-slate-700 hover:border-slate-400 dark:hover:border-slate-600 transition-all active:scale-[0.98]">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+              </svg>
+              <span>Apple</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <p class="text-center text-sm text-slate-500 dark:text-slate-400 mt-6 animate-fade-in stagger-4">
+        By continuing, you agree to our 
+        <a href="#" class="text-primary-600 dark:text-primary-400 hover:underline">Terms of Service</a> 
+        and 
+        <a href="#" class="text-primary-600 dark:text-primary-400 hover:underline">Privacy Policy</a>
+      </p>
+
+      <!-- Dark mode toggle -->
+      <button onclick="toggleDark()" class="absolute top-4 right-4 p-2 rounded-lg text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-white/50 dark:hover:bg-slate-800/50 transition-colors" aria-label="Toggle dark mode">
+        <svg class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+        </svg>
+        <svg class="w-5 h-5 dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Forgot Password Modal -->
+  <div id="forgot-modal" class="fixed inset-0 z-50 hidden">
+    <div class="fixed inset-0 bg-black/50 backdrop-blur-sm" onclick="closeForgotModal()"></div>
+    <div class="fixed inset-0 flex items-center justify-center p-4">
+      <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 w-full max-w-sm p-6 animate-scale-in">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-lg font-bold text-slate-900 dark:text-white">Reset Password</h2>
+          <button onclick="closeForgotModal()" class="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+        <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Enter your email address and we'll send you a link to reset your password.</p>
+        <input type="email" id="reset-email" placeholder="you@example.com" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-shadow mb-4" />
+        <button onclick="submitForgotPassword()" class="w-full py-2.5 px-4 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl shadow-sm hover:shadow transition-all active:scale-[0.98]">
+          Send Reset Link
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 hidden">
+    <div class="flex items-center gap-3 px-4 py-3 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-lg animate-slide-up">
+      <svg id="toast-icon" class="w-5 h-5 text-emerald-400 dark:text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+      </svg>
+      <span class="text-sm font-medium" id="toast-msg">Action completed</span>
+    </div>
+  </div>
+
+  <script>
+    // State
+    let currentMode = 'login';
+    let isLoading = false;
+
+    // Dark mode toggle
+    function toggleDark() {
+      document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+    }
+
+    // Restore dark mode on load
+    if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    }
+
+    // Tab switching
+    function switchTab(mode) {
+      currentMode = mode;
+      const loginTab = document.getElementById('tab-login');
+      const signupTab = document.getElementById('tab-signup');
+      const nameField = document.getElementById('name-field');
+      const loginExtras = document.getElementById('login-extras');
+      const btnText = document.getElementById('btn-text');
+      const errorMessage = document.getElementById('error-message');
+
+      errorMessage.classList.add('hidden');
+
+      if (mode === 'login') {
+        loginTab.className = 'flex-1 py-4 text-sm font-medium text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-950/50 border-b-2 border-primary-500 transition-all';
+        signupTab.className = 'flex-1 py-4 text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 transition-all';
+        nameField.classList.add('hidden');
+        loginExtras.classList.remove('hidden');
+        btnText.textContent = 'Sign In';
+      } else {
+        signupTab.className = 'flex-1 py-4 text-sm font-medium text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-950/50 border-b-2 border-primary-500 transition-all';
+        loginTab.className = 'flex-1 py-4 text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 transition-all';
+        nameField.classList.remove('hidden');
+        loginExtras.classList.add('hidden');
+        btnText.textContent = 'Create Account';
+      }
+    }
+
+    // Password visibility toggle
+    function togglePassword() {
+      const passwordInput = document.getElementById('password');
+      const eyeOpen = document.getElementById('eye-open');
+      const eyeClosed = document.getElementById('eye-closed');
+
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        eyeOpen.classList.add('hidden');
+        eyeClosed.classList.remove('hidden');
+      } else {
+        passwordInput.type = 'password';
+        eyeOpen.classList.remove('hidden');
+        eyeClosed.classList.add('hidden');
+      }
+    }
+
+    // Form validation
+    function validateForm() {
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const name = document.getElementById('name').value.trim();
+
+      let isValid = true;
+
+      // Email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const emailError = document.getElementById('email-error');
+      if (!emailRegex.test(email)) {
+        emailError.classList.remove('hidden');
+        isValid = false;
+      } else {
+        emailError.classList.add('hidden');
+      }
+
+      // Password validation
+      const passwordError = document.getElementById('password-error');
+      if (password.length < 6) {
+        passwordError.classList.remove('hidden');
+        isValid = false;
+      } else {
+        passwordError.classList.add('hidden');
+      }
+
+      // Name validation (signup only)
+      if (currentMode === 'signup') {
+        const nameError = document.getElementById('name-error');
+        if (name.length < 1) {
+          nameError.classList.remove('hidden');
+          isValid = false;
+        } else {
+          nameError.classList.add('hidden');
+        }
+      }
+
+      return isValid;
+    }
+
+    // Show error with shake animation
+    function showError(message) {
+      const errorDiv = document.getElementById('error-message');
+      const errorText = document.getElementById('error-text');
+      
+      errorText.textContent = message;
+      errorDiv.classList.remove('hidden');
+      errorDiv.classList.add('animate-shake');
+      
+      setTimeout(() => {
+        errorDiv.classList.remove('animate-shake');
+      }, 500);
+    }
+
+    // Toast notification
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('toast');
+      const msg = document.getElementById('toast-msg');
+      const icon = document.getElementById('toast-icon');
+      
+      msg.textContent = message;
+      
+      if (type === 'success') {
+        icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>';
+        icon.classList.remove('text-red-400', 'dark:text-red-600');
+        icon.classList.add('text-emerald-400', 'dark:text-emerald-600');
+      } else {
+        icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>';
+        icon.classList.remove('text-emerald-400', 'dark:text-emerald-600');
+        icon.classList.add('text-red-400', 'dark:text-red-600');
+      }
+      
+      toast.classList.remove('hidden');
+      setTimeout(() => toast.classList.add('hidden'), 3000);
+    }
+
+    // Set loading state
+    function setLoading(loading) {
+      isLoading = loading;
+      const btn = document.getElementById('submit-btn');
+      const btnText = document.getElementById('btn-text');
+      const btnSpinner = document.getElementById('btn-spinner');
+      
+      btn.disabled = loading;
+      if (loading) {
+        btnText.classList.add('opacity-0');
+        btnSpinner.classList.remove('hidden');
+      } else {
+        btnText.classList.remove('opacity-0');
+        btnSpinner.classList.add('hidden');
+      }
+    }
+
+    // Form submission
+    async function handleSubmit(event) {
+      event.preventDefault();
+      
+      if (isLoading) return;
+      
+      // Hide previous error
+      document.getElementById('error-message').classList.add('hidden');
+      
+      // Validate
+      if (!validateForm()) {
+        return;
+      }
+      
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const name = document.getElementById('name').value.trim();
+      const remember = document.getElementById('remember').checked;
+      
+      setLoading(true);
+      
+      try {
+        const endpoint = currentMode === 'login' ? '/api/auth/login' : '/api/auth/register';
+        const body = currentMode === 'login' 
+          ? { email, password }
+          : { email, password, name };
+        
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(body)
+        });
+        
+        const data = await response.json();
+        
+        if (!response.ok || !data.success) {
+          throw new Error(data.error || 'Authentication failed');
+        }
+        
+        // Save token
+        const storage = remember ? localStorage : sessionStorage;
+        storage.setItem('token', data.data.token);
+        
+        showToast(currentMode === 'login' ? 'Welcome back!' : 'Account created successfully!');
+        
+        // Redirect to dashboard
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 500);
+        
+      } catch (error) {
+        showError(error.message || 'An error occurred. Please try again.');
+        setLoading(false);
+      }
+    }
+
+    // Forgot password
+    function showForgotPassword() {
+      document.getElementById('forgot-modal').classList.remove('hidden');
+      document.getElementById('reset-email').value = document.getElementById('email').value;
+    }
+
+    function closeForgotModal() {
+      document.getElementById('forgot-modal').classList.add('hidden');
+    }
+
+    function submitForgotPassword() {
+      const email = document.getElementById('reset-email').value.trim();
+      if (!email) {
+        showToast('Please enter your email', 'error');
+        return;
+      }
+      
+      // Simulate sending reset link (placeholder functionality)
+      showToast('If an account exists, a reset link has been sent');
+      closeForgotModal();
+    }
+
+    // Check if already logged in
+    document.addEventListener('DOMContentLoaded', () => {
+      const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+      if (token) {
+        // Verify token is still valid
+        fetch('/api/auth/me', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            window.location.href = 'index.html';
+          }
+        })
+        .catch(() => {
+          // Token invalid, clear it
+          localStorage.removeItem('token');
+          sessionStorage.removeItem('token');
+        });
+      }
+    });
+
+    // Close modal on escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeForgotModal();
+      }
+    });
+  </script>
+</body>
+</html>

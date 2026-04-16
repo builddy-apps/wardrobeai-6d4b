@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StyleMuse - Saved Looks</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: { 50: '#fdf2f8', 100: '#fce7f3', 200: '#fbcfe8', 300: '#f9a8d4', 400: '#f472b6', 500: '#ec4899', 600: '#db2777', 700: '#be185d', 800: '#9d174d', 900: '#831843', 950: '#500724' },
+            accent: { 50: '#fffbeb', 100: '#fef3c7', 200: '#fde68a', 300: '#fcd34d', 400: '#fbbf24', 500: '#f59e0b', 600: '#d97706', 700: '#b45309', 800: '#92400e', 900: '#78350f', 950: '#451a03' }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @keyframes fade-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes scale-in { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+    @keyframes slide-up { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes heart-pop { 0% { transform: scale(1); } 50% { transform: scale(1.3); } 100% { transform: scale(1); } }
+    @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+    .animate-fade-in { animation: fade-in 0.4s ease-out forwards; }
+    .animate-scale-in { animation: scale-in 0.2s ease-out forwards; }
+    .animate-slide-up { animation: slide-up 0.3s ease-out forwards; }
+    .animate-heart-pop { animation: heart-pop 0.4s ease-out; }
+    .animate-shimmer { background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.1) 50%, transparent 100%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
+    .stagger-1 { animation-delay: 0.05s; opacity: 0; }
+    .stagger-2 { animation-delay: 0.1s; opacity: 0; }
+    .stagger-3 { animation-delay: 0.15s; opacity: 0; }
+    .stagger-4 { animation-delay: 0.2s; opacity: 0; }
+  </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 min-h-screen">
+  <header class="sticky top-0 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg border-b border-slate-200 dark:border-slate-800">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex items-center gap-8">
+          <a href="index.html" class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center">
+              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
+            </div>
+            <span class="text-xl font-bold text-slate-900 dark:text-white">StyleMuse</span>
+          </a>
+          <nav class="hidden md:flex items-center gap-1">
+            <a href="wardrobe.html" class="px-3 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 rounded-lg transition-colors">Wardrobe</a>
+            <a href="outfit-studio.html" class="px-3 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 rounded-lg transition-colors">Outfit Studio</a>
+            <a href="saved-looks.html" class="px-3 py-2 text-sm font-medium text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-950/50 rounded-lg">Saved Looks</a>
+            <a href="style-insights.html" class="px-3 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 rounded-lg transition-colors">Insights</a>
+          </nav>
+        </div>
+        <div class="flex items-center gap-3">
+          <button onclick="toggleDark()" class="p-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+            <svg class="w-5 h-5 dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+            <svg class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+          </button>
+          <button onclick="logout()" class="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Sign Out</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 animate-fade-in">
+      <div>
+        <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Saved Looks</h1>
+        <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Your favorite outfit combinations</p>
+      </div>
+      <a href="outfit-studio.html" class="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium rounded-xl transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+        Create Outfit
+      </a>
+    </div>
+
+    <div class="flex flex-col sm:flex-row gap-4 mb-6 animate-fade-in stagger-1">
+      <div class="relative flex-1">
+        <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <input type="text" id="search-input" placeholder="Search outfits..." class="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all">
+      </div>
+      <div class="flex gap-2 flex-wrap">
+        <button onclick="setFilter('all')" data-filter="all" class="filter-btn px-3 py-2 text-sm font-medium rounded-lg transition-all bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300">All</button>
+        <button onclick="setFilter('favorites')" data-filter="favorites" class="filter-btn px-3 py-2 text-sm font-medium rounded-lg transition-all bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700">Favorites</button>
+        <select id="occasion-filter" onchange="filterByOccasion(this.value)" class="px-3 py-2 text-sm bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500">
+          <option value="">All Occasions</option>
+          <option value="Work">Work</option>
+          <option value="Casual">Casual</option>
+          <option value="Date Night">Date Night</option>
+          <option value="Workout">Workout</option>
+          <option value="Formal">Formal</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="looks-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    <div id="loading-state" class="hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    <div id="empty-state" class="hidden"></div>
+    <div id="pagination" class="flex justify-center gap-2 mt-8"></div>
+  </main>
+
+  <div id="detail-modal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeDetailModal()"></div>
+    <div class="absolute inset-4 sm:inset-auto sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 sm:w-full sm:max-w-2xl bg-white dark:bg-slate-900 rounded-2xl shadow-2xl overflow-hidden animate-scale-in">
+      <div class="p-6">
+        <div class="flex items-start justify-between mb-4">
+          <div>
+            <h2 id="modal-title" class="text-xl font-bold text-slate-900 dark:text-white"></h2>
+            <div class="flex gap-2 mt-2" id="modal-tags"></div>
+          </div>
+          <button onclick="closeDetailModal()" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+            <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+        <div id="modal-preview" class="aspect-[3/4] bg-slate-100 dark:bg-slate-800 rounded-xl mb-4 overflow-hidden"></div>
+        <div id="modal-items" class="space-y-2 mb-4"></div>
+        <div class="flex gap-3">
+          <button id="modal-favorite-btn" onclick="toggleFavoriteModal()" class="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+            <svg id="modal-heart" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+            <span class="text-sm font-medium">Favorite</span>
+          </button>
+          <button onclick="shareOutfit()" class="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+            <span class="text-sm font-medium">Share</span>
+          </button>
+          <button onclick="confirmDelete()" class="flex items-center justify-center gap-2 px-4 py-2.5 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="delete-modal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeDeleteModal()"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-sm bg-white dark:bg-slate-900 rounded-2xl shadow-2xl p-6 animate-scale-in">
+      <div class="text-center">
+        <div class="w-12 h-12 mx-auto mb-4 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
+          <svg class="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+        </div>
+        <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Delete Outfit?</h3>
+        <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">This action cannot be undone. The outfit will be permanently removed.</p>
+        <div class="flex gap-3">
+          <button onclick="closeDeleteModal()" class="flex-1 px-4 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">Cancel</button>
+          <button onclick="deleteOutfit()" class="flex-1 px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-xl text-sm font-medium transition-colors">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script src="auth-client.js"></script>
+  <script>
+    let savedLooks = [];
+    let filteredLooks = [];
+    let currentFilter = 'all';
+    let currentOccasion = '';
+    let currentLook = null;
+    let currentPage = 1;
+    const perPage = 9;
+
+    async function init() {
+      if (!await AuthClient.requireAuth()) return;
+      await loadSavedLooks();
+      setupSearch();
+    }
+
+    async function loadSavedLooks() {
+      const grid = document.getElementById('looks-grid');
+      const loading = document.getElementById('loading-state');
+      grid.innerHTML = '';
+      loading.classList.remove('hidden');
+      loading.innerHTML = Array(6).fill('<div class="aspect-[3/4] bg-slate-200 dark:bg-slate-800 rounded-xl animate-shimmer"></div>').join('');
+
+      try {
+        const res = await fetch('/apps/6d4b5e94-350a-49f5-aacc-20a9f910785a/api/saved-looks', { headers: AuthClient.createAuthHeaders() });
+        const data = await res.json();
+        if (data.success) {
+          savedLooks = data.data.looks || [];
+          applyFilters();
+        }
+      } catch (err) {
+        showToast('Failed to load saved looks', 'error');
+      } finally {
+        loading.classList.add('hidden');
+      }
+    }
+
+    function applyFilters() {
+      const search = document.getElementById('search-input').value.toLowerCase();
+      filteredLooks = savedLooks.filter(look => {
+        const matchSearch = !search || (look.name || '').toLowerCase().includes(search);
+        const matchFav = currentFilter !== 'favorites' || look.is_favorite;
+        const matchOccasion = !currentOccasion || look.occasion === currentOccasion;
+        return matchSearch && matchFav && matchOccasion;
+      });
+      currentPage = 1;
+      renderLooks();
+    }
+
+    function renderLooks() {
+      const grid = document.getElementById('looks-grid');
+      const empty = document.getElementById('empty-state');
+      const pagination = document.getElementById('pagination');
+
+      if (filteredLooks.length === 0) {
+        grid.innerHTML = '';
+        pagination.innerHTML = '';
+        empty.classList.remove('hidden');
+        empty.innerHTML = `
+          <div class="text-center py-16 animate-fade-in">
+            <div class="w-24 h-24 mx-auto mb-6 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+              <svg class="w-12 h-12 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+            </div>
+            <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-2">No saved looks yet</h3>
+            <p class="text-slate-500 dark:text-slate-400 mb-6 max-w-sm mx-auto">Start creating outfits in the studio and save your favorites here.</p>
+            <a href="outfit-studio.html" class="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-xl transition-colors">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+              Create Your First Outfit
+            </a>
+          </div>`;
+        return;
+      }
+
+      empty.classList.add('hidden');
+      const start = (currentPage - 1) * perPage;
+      const pageLooks = filteredLooks.slice(start, start + perPage);
+
+      grid.innerHTML = pageLooks.map((look, i) => `
+        <div class="group bg-white dark:bg-slate-800 rounded-xl shadow-sm hover:shadow-md border border-slate-200 dark:border-slate-700 overflow-hidden cursor-pointer transition-all duration-200 hover:scale-[1.02] animate-fade-in stagger-${(i % 4) + 1}" onclick="openDetailModal(${look.id})">
+          <div class="aspect-[3/4] bg-slate-100 dark:bg-slate-700 relative overflow-hidden">
+            ${look.preview_data ? `<img src="${look.preview_data}" class="w-full h-full object-cover" alt="${look.name}">` : `<div class="w-full h-full flex items-center justify-center text-slate-400"><svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div>`}
+            <button onclick="event.stopPropagation(); toggleFavorite(${look.id}, ${look.is_favorite})" class="absolute top-3 right-3 p-2 rounded-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm hover:scale-110 transition-transform">
+              <svg class="w-5 h-5 ${look.is_favorite ? 'text-red-500 fill-current' : 'text-slate-400'}" fill="${look.is_favorite ? 'currentColor' : 'none'}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+            </button>
+          </div>
+          <div class="p-4">
+            <h3 class="font-semibold text-slate-900 dark:text-white truncate">${look.name || 'Untitled Outfit'}</h3>
+            <div class="flex flex-wrap gap-1.5 mt-2">
+              ${look.occasion ? `<span class="px-2 py-0.5 text-xs font-medium bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 rounded-full">${look.occasion}</span>` : ''}
+              ${look.weather ? `<span class="px-2 py-0.5 text-xs font-medium bg-accent-100 dark:bg-accent-900/30 text-accent-700 dark:text-accent-300 rounded-full">${look.weather}</span>` : ''}
+            </div>
+            <p class="text-xs text-slate-400 dark:text-slate-500 mt-2">${formatDate(look.created_at)}</p>
+          </div>
+        </div>`).join('');
+
+      const totalPages = Math.ceil(filteredLooks.length / perPage);
+      if (totalPages > 1) {
+        pagination.innerHTML = Array.from({ length: totalPages }, (_, i) => `
+          <button onclick="goToPage(${i + 1})" class="px-3 py-1.5 text-sm font-medium rounded-lg transition-colors ${currentPage === i + 1 ? 'bg-primary-600 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'}">${i + 1}</button>`).join('');
+      } else {
+        pagination.innerHTML = '';
+      }
+    }
+
+    function setupSearch() {
+      const input = document.getElementById('search-input');
+      input.addEventListener('input', debounce(applyFilters, 300));
+    }
+
+    function setFilter(filter) {
+      currentFilter = filter;
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('bg-primary-100', 'dark:bg-primary-900/30', 'text-primary-700', 'dark:text-primary-300');
+        btn.classList.add('bg-slate-100', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-400');
+      });
+      const active = document.querySelector(`[data-filter="${filter}"]`);
+      active.classList.remove('bg-slate-100', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-400');
+      active.classList.add('bg-primary-100', 'dark:bg-primary-900/30', 'text-primary-700', 'dark:text-primary-300');
+      applyFilters();
+    }
+
+    function filterByOccasion(occasion) {
+      currentOccasion = occasion;
+      applyFilters();
+    }
+
+    function goToPage(page) {
+      currentPage = page;
+      renderLooks();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    async function toggleFavorite(lookId, currentStatus) {
+      try {
+        const look = savedLooks.find(l => l.id === lookId);
+        const outfitId = look?.outfit_id;
+        if (!outfitId) return;
+        
+        if (currentStatus) {
+          await fetch(`/api/outfits/${outfitId}/save`, { method: 'DELETE', headers: AuthClient.createAuthHeaders() });
+        } else {
+          await fetch(`/api/outfits/${outfitId}/save`, { method: 'POST', headers: AuthClient.createAuthHeaders() });
+        }
+        const idx = savedLooks.findIndex(l => l.id === lookId);
+        if (idx !== -1) savedLooks[idx].is_favorite = !currentStatus;
+        applyFilters();
+        showToast(currentStatus ? 'Removed from favorites' : 'Added to favorites');
+      } catch (err) {
+        showToast('Failed to update favorite', 'error');
+      }
+    }
+
+    function openDetailModal(lookId) {
+      currentLook = savedLooks.find(l => l.id === lookId);
+      if (!currentLook) return;
+
+      document.getElementById('modal-title').textContent = currentLook.name || 'Untitled Outfit';
+      document.getElementById('modal-tags').innerHTML = `
+        ${currentLook.occasion ? `<span class="px-2 py-1 text-xs font-medium bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 rounded-full">${currentLook.occasion}</span>` : ''}
+        ${currentLook.weather ? `<span class="px-2 py-1 text-xs font-medium bg-accent-100 dark:bg-accent-900/30 text-accent-700 dark:text-accent-300 rounded-full">${currentLook.weather}</span>` : ''}`;
+      document.getElementById('modal-preview').innerHTML = currentLook.preview_data 
+        ? `<img src="${currentLook.preview_data}" class="w-full h-full object-cover" alt="${currentLook.name}">`
+        : `<div class="w-full h-full flex items-center justify-center text-slate-400"><svg class="w-20 h-20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div>`;
+
+      let items = [];
+      try { items = JSON.parse(currentLook.items_json || '[]'); } catch {}
+      document.getElementById('modal-items').innerHTML = items.length > 0 
+        ? `<h4 class="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Items</h4>` + items.map(item => `
+          <div class="flex items-center gap-3 p-2 bg-slate-50 dark:bg-slate-800 rounded-lg">
+            <div class="w-10 h-10 rounded bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-xs text-slate-500">${item.category?.[0] || '?'}</div>
+            <div>
+              <p class="text-sm font-medium text-slate-900 dark:text-white">${item.name || 'Item'}</p>
+              <p class="text-xs text-slate-500">${item.category || ''}</p>
+            </div>
+          </div>`).join('')
+        : '<p class="text-sm text-slate-500">No items recorded</p>';
+
+      updateFavoriteBtn();
+      document.getElementById('detail-modal').classList.remove('hidden');
+    }
+
+    function updateFavoriteBtn() {
+      const heart = document.getElementById('modal-heart');
+      if (currentLook?.is_favorite) {
+        heart.classList.add('text-red-500', 'fill-current');
+        heart.classList.remove('text-slate-400');
+      } else {
+        heart.classList.remove('text-red-500', 'fill-current');
+        heart.classList.add('text-slate-400');
+      }
+    }
+
+    function closeDetailModal() {
+      document.getElementById('detail-modal').classList.add('hidden');
+      currentLook = null;
+    }
+
+    async function toggleFavoriteModal() {
+      if (!currentLook) return;
+      await toggleFavorite(currentLook.id, currentLook.is_favorite);
+      currentLook = savedLooks.find(l => l.id === currentLook.id);
+      updateFavoriteBtn();
+    }
+
+    async function shareOutfit() {
+      if (!currentLook?.outfit_id) return;
+      try {
+        const res = await fetch(`/api/share/${currentLook.outfit_id}`, { method: 'POST', headers: AuthClient.createAuthHeaders() });
+        const data = await res.json();
+        if (data.success) {
+          const url = `${window.location.origin}/share.html?code=${data.data.share_code}`;
+          await navigator.clipboard.writeText(url);
+          showToast('Link copied to clipboard!');
+        }
+      } catch (err) {
+        showToast('Failed to create share link', 'error');
+      }
+    }
+
+    function confirmDelete() {
+      document.getElementById('delete-modal').classList.remove('hidden');
+    }
+
+    function closeDeleteModal() {
+      document.getElementById('delete-modal').classList.add('hidden');
+    }
+
+    async function deleteOutfit() {
+      if (!currentLook?.outfit_id) return;
+      try {
+        await fetch(`/api/outfits/${currentLook.outfit_id}`, { method: 'DELETE', headers: AuthClient.createAuthHeaders() });
+        savedLooks = savedLooks.filter(l => l.id !== currentLook.id);
+        closeDeleteModal();
+        closeDetailModal();
+        applyFilters();
+        showToast('Outfit deleted');
+      } catch (err) {
+        showToast('Failed to delete outfit', 'error');
+      }
+    }
+
+    function logout() { AuthClient.logout();

@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StyleMuse - Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50: '#fdf2f8',
+              100: '#fce7f3',
+              200: '#fbcfe8',
+              300: '#f9a8d4',
+              400: '#f472b6',
+              500: '#ec4899',
+              600: '#db2777',
+              700: '#be185d',
+              800: '#9d174d',
+              900: '#831843',
+              950: '#500724'
+            },
+            accent: {
+              50: '#fffbeb',
+              100: '#fef3c7',
+              200: '#fde68a',
+              300: '#fcd34d',
+              400: '#fbbf24',
+              500: '#f59e0b',
+              600: '#d97706',
+              700: '#b45309',
+              800: '#92400e',
+              900: '#78350f',
+              950: '#451a03'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @keyframes fade-in {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes scale-in {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    @keyframes slide-up {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slide-left {
+      from { opacity: 0; transform: translateX(24px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes pulse-soft {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    .animate-fade-in { animation: fade-in 0.4s ease-out forwards; }
+    .animate-scale-in { animation: scale-in 0.2s ease-out forwards; }
+    .animate-slide-up { animation: slide-up 0.3s ease-out forwards; }
+    .animate-slide-left { animation: slide-left 0.4s ease-out forwards; }
+    .animate-pulse-soft { animation: pulse-soft 2s ease-in-out infinite; }
+    .animate-float { animation: float 3s ease-in-out infinite; }
+    .stagger-1 { animation-delay: 0.05s; opacity: 0; }
+    .stagger-2 { animation-delay: 0.1s; opacity: 0; }
+    .stagger-3 { animation-delay: 0.15s; opacity: 0; }
+    .stagger-4 { animation-delay: 0.2s; opacity: 0; }
+    .stagger-5 { animation-delay: 0.25s; opacity: 0; }
+    .carousel-container {
+      scroll-behavior: smooth;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .carousel-container::-webkit-scrollbar {
+      display: none;
+    }
+    .line-clamp-2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
+  <!-- Header -->
+  <header class="sticky top-0 z-40 border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md transition-colors">
+    <div class="mx-auto max-w-6xl flex items-center justify-between px-4 h-16">
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+            </svg>
+          </div>
+          <span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">StyleMuse</span>
+        </a>
+        <nav class="hidden md:flex items-center gap-1 ml-8">
+          <a href="wardrobe.html" class="px-3 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Wardrobe</a>
+          <a href="outfit-studio.html" class="px-3 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Outfit Studio</a>
+          <a href="saved-looks.html" class="px-3 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Saved Looks</a>
+          <a href="style-insights.html" class="px-3 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Insights</a>
+        </nav>
+      </div>
+      <div class="flex items-center gap-2">
+        <button onclick="toggleDark()" class="p-2 rounded-lg text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Toggle dark mode">
+          <svg class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+          </svg>
+          <svg class="w-5 h-5 dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+          </svg>
+        </button>
+        <div class="relative" id="user-menu-container">
+          <button onclick="toggleUserMenu()" class="flex items-center gap-2 p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary-400 to-accent-400 flex items-center justify-center text-white font-semibold text-sm" id="user-avatar">
+              U
+            </div>
+            <svg class="w-4 h-4 text-slate-500 hidden sm:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </button>
+          <div id="user-menu" class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-slate-900 rounded-xl shadow-lg border border-slate-200 dark:border-slate-800 py-1 animate-scale-in">
+            <div class="px-4 py-2 border-b border-slate-200 dark:border-slate-800">
+              <p class="text-sm font-medium text-slate-900 dark:text-white" id="menu-user-name">User</p>
+              <p class="text-xs text-slate-500" id="menu-user-email">user@example.com</p>
+            </div>
+            <a href="wardrobe.html" class="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+              </svg>
+              My Wardrobe
+            </a>
+            <a href="style-insights.html" class="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+              </svg>
+              Style Insights
+            </a>
+            <button onclick="logout()" class="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950 transition-colors">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+              </svg>
+              Sign Out
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Mobile Nav -->
+    <nav class="md:hidden flex items-center justify-around border-t border-slate-200 dark:border-slate-800 py-2 px-4 bg-white dark:bg-slate-900">
+      <a href="index.html" class="flex flex-col items-center gap-1 px-3 py-1 text-primary-600 dark:text-primary-400">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+        </svg>
+        <span class="text-xs font-medium">Home</span>
+      </a>
+      <a href="wardrobe.html" class="flex flex-col items-center gap-1 px-3 py-1 text-slate-500 dark:text-slate-400">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+        </svg>
+        <span class="text-xs font-medium">Wardrobe</span>
+      </a>
+      <a href="outfit-studio.html" class="flex flex-col items-center gap-1 px-3 py-1 text-slate-500 dark:text-slate-400">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+        </svg>
+        <span class="text-xs font-medium">Studio</span>
+      </a>
+      <a href="saved-looks.html" class="flex flex-col items-center gap-1 px-3 py-1 text-slate-500 dark:text-slate-400">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+        </svg>
+        <span class="text-xs font-medium">Saved</span>
+      </a>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="mx-auto max-w-6xl px-4 py-8">
+    <!-- Welcome Section -->
+    <section class="mb-8 animate-fade-in">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">
+            Welcome back, <span id="user-name" class="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-accent-500">User</span>!
+          </h1>
+          <p class="text-slate-500 dark:text-slate-400 mt-1">Ready to create your perfect look today?</p>
+        </div>
+        <a href="outfit-studio.html" class="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-700 hover:to-primary-600 text-white font-medium rounded-xl shadow-sm hover:shadow-md transition-all active:scale-95">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+          </svg>
+          Create Outfit
+        </a>
+      </div>
+    </section>
+
+    <!-- Stats Cards -->
+    <section class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8" id="stats-section">
+      <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm hover:shadow-md transition-all duration-200 animate-fade-in stagger-1">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-primary-100 dark:bg-primary-950 flex items-center justify-center">
+            <svg class="w-5 h-5 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+            </svg>
+          </div>
+          <div>
+            <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Total Items</p>
+            <p class="text-2xl font-bold text-slate-900 dark:text-white" id="stat-items">-</p>
+          </div>
+        </div>
+      </div>
+      <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm hover:shadow-md transition-all duration-200 animate-fade-in stagger-2">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-accent-100 dark:bg-accent-950 flex items-center justify-center">
+            <svg class="w-5 h-5 text-accent-600 dark:text-accent-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+            </svg>
+          </div>
+          <div>
+            <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Outfits Created</p>
+            <p class="text-2xl font-bold text-slate-900 dark:text-white" id="stat-outfits">-</p>
+          </div>
+        </div>
+      </div>
+      <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm hover:shadow-md transition-all duration-200 animate-fade-in stagger-3">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-rose-100 dark:bg-rose-950 flex items-center justify-center">
+            <svg class="w-5 h-5 text-rose-600 dark:text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+            </svg>
+          </div>
+          <div>
+            <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Saved Looks</p>
+            <p class="text-2xl font-bold text-slate-900 dark:text-white" id="stat-saved">-</p>
+          </div>
+        </div>
+      </div>
+      <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm hover:shadow-md transition-all duration-200 animate-fade-in stagger-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-emerald-100 dark:bg-emerald-950 flex items-center justify-center">
+            <svg class="w-5 h-5 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/>
+            </svg>
+          </div>
+          <div>
+            <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Categories</p>
+            <p class="text-2xl font-bold text-slate-900 dark:text-white" id="stat-categories">-</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recent Outfit Suggestions -->
+    <section class="mb-8">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-xl font-bold text-slate-900 dark:text-white">Recent Outfit Suggestions</h2>
+        <div class="flex items-center gap-2">
+          <button onclick="scrollCarousel(-1)" class="p-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            </svg>
+          </button>
+          <button onclick="scrollCarousel(1)" class="p-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div id="outfit-carousel" class="carousel-container flex gap-4 overflow-x-auto pb-2">
+        <!-- Loading skeleton -->
+        <div class="flex-shrink-0 w-72 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden animate-pulse">
+          <div class="h-48 bg-slate-200 dark:bg-slate-800"></div>
+          <div class="p-4 space-y-2">
+            <div class="h-4 bg-slate-200 dark:bg-slate-800 rounded w-3/4"></div>
+            <div class="h-3 bg-slate-200 dark:bg-slate-800 rounded w-1/2"></div>
+          </div>
+        </div>
+        <div class="flex-shrink-0 w-72 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden animate-pulse">
+          <div class="h-48 bg-slate-200 dark:bg-slate-800"></div>
+          <div class="p-4 space-y-2">
+            <div class="h-4 bg-slate-200 dark:bg-slate-800 rounded w-3/4"></div>
+            <div class="h-3 bg-slate-200 dark:bg-slate-800 rounded w-1/2"></div>
+          </div>
+        </div>
+        <div class="flex-shrink-0 w-72 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden animate-pulse">
+          <div class="h-48 bg-slate-200 dark:bg-slate-800"></div>
+          <div class="p-4 space-y-2">
+            <div class="h-4 bg-slate-200 dark:bg-slate-800 rounded w-3/4"></div>
+            <div class="h-3 bg-slate-200 dark:bg-slate-800 rounded w-1/2"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Actions -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+      <a href="wardrobe.html" class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm hover:shadow-md hover:border-primary-300 dark:hover:border-primary-700 transition-all duration-200 animate-fade-in stagger-3">
+        <div class="flex items-start gap-4">
+          <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-950 dark:to-primary-900 flex items-center justify-center group-hover:scale-110 transition-transform">
+            <svg class="w-6 h-6 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+          </div>
+          <div class="flex-1">
+            <h3 class="font-semibold text-slate-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">Browse Wardrobe</h3>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">View and manage your clothing collection</p>
+          </div>
+          <svg class="w-5 h-5 text-slate-400 group-hover:text-primary-500 group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </svg>
+        </div>
+      </a>
+      <a href="style-insights.html" class="group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm hover:shadow-md hover:border-accent-300 dark:hover:border-accent-700 transition-all duration-200 animate-fade-in stagger-4">
+        <div class="flex items-start gap-4">
+          <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-accent-100 to-accent-200 dark:from-accent-950 dark:to-accent-900 flex items-center justify-center group-hover:scale-110 transition-transform">
+            <svg class="w-6 h-6 text-accent-600 dark:text-accent-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+            </svg>
+          </div>
+          <div class="flex-1">
+            <h3 class="font-semibold text-slate-900 dark:text-white group-hover:text-accent-600 dark:group-hover:text-accent-400 transition-colors">Style Insights</h3>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Discover patterns and trends in your style</p>
+          </div>
+          <svg class="w-5 h-5 text-slate-400 group-hover:text-accent-500 group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </svg>
+        </div>
+      </a>
+    </section>
+  </main>
+
+  <!-- Floating Action Button -->
+  <button onclick="openQuickAddModal()" class="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-r from-primary-600 to-accent-500 hover:from-primary-700 hover:to-accent-600 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200 active:scale-95 animate-float z-30" aria-label="Quick add wardrobe item">
+    <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+    </svg>
+  </button>
+
+  <!-- Quick Add Modal -->
+  <div id="quick-add-modal" class="fixed inset-0 z-50 hidden">
+    <div class="fixed inset-0 bg-black/50 backdrop-blur-sm" onclick="closeQuickAddModal()"></div>
+    <div class="fixed inset-0 flex items-center justify-center p-4">
+      <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 w-full max-w-md p-6 animate-scale-in">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-lg font-bold text-slate-900 dark:text-white">Add to Wardrobe</h2>
+          <button onclick="closeQuickAddModal()" class="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+        <div id="upload-area" class="border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl p-8 text-center hover:border-primary-400 dark:hover:border-primary-600 transition-colors cursor-pointer" onclick="document.getElementById('file-input').click()">
+          <input type="file" id="file-input" accept="image/*" multiple class="hidden" onchange="handleFileSelect(event)">
+          <div class="w-12 h-12 rounded-full bg-primary-100 dark:bg-primary-950 flex items-center justify-center mx-auto mb-3">
+            <svg class="w-6 h-6 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+          </div>
+          <p class="text-sm font-medium text-slate-700 dark:text-slate-300">Click or drag photos here</p>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">PNG, JPG up to 10MB each</p>
+        </div>
+        <div id="upload-preview" class="hidden mt-4 space-y-3 max-h-64 overflow-y-auto"></div>
+        <div id="upload-progress" class="hidden mt-4">
+          <div class="flex items-center justify-between text-sm mb-1">
+            <span class="text-slate-600 dark:text-slate-400">Uploading...</span>
+            <span class="text-slate-900 dark:text-white font-medium" id="progress-text">0%</span>
+          </div>
+          <div class="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+            <div id="progress-bar" class="h-full bg-gradient-to-r from-primary-500 to-accent-500 transition-all duration-300" style="width: 0%"></div>
+          </div>
+        </div>
+        <div class="flex justify-end gap-2 mt-6">
+          <button onclick="closeQuickAddModal()" class="px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors">Cancel</button>
+          <button id="upload-btn" onclick="uploadItems()" disabled class="px-4 py-2 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 disabled:bg-slate-300 dark:disabled:bg-slate-700 disabled:cursor-not-allowed rounded-lg shadow-sm transition-all active:scale-95">Add Items</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 hidden">
+    <div class="flex items-center gap-3 px-4 py-3 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-lg animate-slide-up">
+      <svg id="toast-icon" class="w-5 h-5 text-emerald-400 dark:text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+      </svg>
+      <span class="text-sm font-medium" id="toast-msg">Action completed</span>
+    </div>
+  </div>
+
+  <script>
+    // Dark mode toggle
+    function toggleDark() {
+      document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+    }
+
+    // Restore dark mode on load
+    if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    }
+
+    // User menu toggle
+    function toggleUserMenu() {
+      const menu = document.getElementById('user-menu');
+      menu.classList.toggle('hidden');
+    }
+
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+      const container = document.getElementById('user-menu-container');
+      const menu = document.getElementById('user-menu');
+      if (!container.contains(e.target)) {
+        menu.classList.add('hidden');
+      }
+    });
+
+    // Toast notification
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('toast');
+      const msg = document.getElementById('toast-msg');
+      const icon = document.getElementById('toast-icon');
+      
+      msg.textContent = message;
+      
+      if (type === 'success') {
+        icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>';
+        icon.classList.remove('text-red-400', 'dark:text-red-600');
+        icon.classList.add('text-emerald-400', 'dark:text-emerald-600');
+      } else if (type === 'error') {
+        icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>';
+        icon.classList.remove('text-emerald-400', 'dark:text-emerald-600');
+        icon.classList.add('text-red-400', 'dark:text-red-600');
+      }
+      
+      toast.classList.remove('hidden');
+      setTimeout(() => toast.classList.add('hidden'), 3000);
+    }
+
+    // API helpers
+    function getToken() {
+      return localStorage.getItem('token') || sessionStorage.getItem('token');
+    }
+
+    async function apiGet(url) {
+      const token = getToken();
+      const res = await fetch(url, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (!res.ok) {
+        if (res.status === 401) {
+          window.location.href = 'login.html';
+          return null;
+        }
+        throw new Error('Request failed');
+      }
+      return res.json();
+    }
+
+    async function apiPost(url, data) {
+      const token = getToken();
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+      if (!res.ok) {
+        if (res.status === 401) {
+          window.location.href = 'login.html';
+          return null;
+        }
+        throw new Error('Request failed');
+      }
+      return res.json();
+    }
+
+    // Logout
+    function logout() {
+      localStorage.removeItem('token');
+      sessionStorage.removeItem('token');
+      window.location.href = 'login.html';
+    }
+
+    // Carousel scroll
+    function scrollCarousel(direction) {
+      const carousel = document.getElementById('outfit-carousel');
+      const scrollAmount = 300;
+      carousel.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
+    }
+
+    // Quick Add Modal
+    let selectedFiles = [];
+
+    function openQuickAddModal() {
+      document.getElementById('quick-add-modal').classList.remove('hidden');
+      document.getElementById('upload-area').classList.remove('hidden');
+      document.getElementById('upload-preview').classList.add('hidden');
+      document.getElementById('upload-progress').classList.add('hidden');
+      document.getElementById('upload-btn').disabled = true;
+      selectedFiles = [];
+    }
+
+    function closeQuickAddModal() {
+      document.getElementById('quick-add-modal').classList.add('hidden');
+      document.getElementById('file-input').value = '';
+      selectedFiles = [];
+    }
+
+    function handleFileSelect(event) {
+      const files = Array.from(event.target.files);
+      if (files.length === 0) return;
+
+      selectedFiles = files;
+      const preview = document.getElementById('upload-preview');
+      preview.innerHTML = '';
+
+      files.forEach((file, index) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const div = document.createElement('div');
+          div.className = 'flex items-center gap-3 p-2 bg-slate-50 dark:bg-slate-800 rounded-lg';
+          div.innerHTML = `
+            <img src="${e.target.result}" class="w-12 h-12 object-cover rounded-lg">
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-medium text-slate-900 dark:text-white truncate">${file.name}</p>
+              <p class="text-xs text-slate-500">${(file.size / 1024).toFixed(1)} KB</p>
+            </div>
+            <button onclick="removeFile(${index})" class="p-1 text-slate-400 hover:text-red-500 transition-colors">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+            </button>
+          `;
+          preview.appendChild(div);
+        };
+        reader.readAsDataURL(file);
+      });
+
+      document.getElementById('upload-area').classList.add('hidden');
+      preview.classList.remove('hidden');
+      document.getElementById('upload-btn').disabled = false;
+    }
+
+    function removeFile(index) {
+      selectedFiles.splice(index, 1);
+      if (selectedFiles.length === 0) {
+        document.getElementById('upload-area').classList.remove('hidden');
+        document.getElementById('upload-preview').classList.add('hidden');
+        document.getElementById('upload-btn').disabled = true;
+      } else {
+        handleFileSelect({ target: { files: selectedFiles } });
+      }
+    }
+
+    async function uploadItems() {
+      if (selectedFiles.length === 0) return;
+
+      const progressDiv = document.getElementById('upload-progress');
+      const progressBar = document.getElementById('progress-bar');
+      const progressText = document.getElementById('progress-text');
+      const uploadBtn = document.getElementById('upload-btn');
+
+      progressDiv.classList.remove('hidden');
+      uploadBtn.disabled = true;
+
+      const items = [];
+      for (let i = 0; i < selectedFiles.length; i++) {
+        const file = selectedFiles[i];
+        const progress = Math.round(((i + 1) / selectedFiles.length) * 100);
+        progressBar.style.width = `${progress}%`;
+        progressText.textContent = `${progress}%`;
+
+        const reader = new FileReader();
+        const imageData = await new Promise((resolve) => {
+          reader.onload = (e) => resolve(e.target.result);
+          reader.readAsDataURL(file);
+        });
+
+        items.push({
+          image_data: imageData,
+          name: file.name.replace(/\.[^/.]+$/, '')
+        });
+      }
+
+      try {
+        const result = await apiPost('/apps/6d4b5e94-350a-49f5-aacc-20a9f910785a/api/wardrobe/upload', { items });
+        if (result && result.success) {
+          showToast(`${result.data.count} item(s) added to your wardrobe!`);
+          closeQuickAddModal();
+          loadDashboardData();
+        }
+      } catch (error) {
+        showToast('Failed to upload items', 'error');
+      }
+
+      progressDiv.classList.add('hidden');
+      uploadBtn.disabled = false;
+    }
+
+    // Load dashboard data
+    async function loadDashboardData() {
+      try {
+        // Get user info
+        const userResult = await apiGet('/apps/6d4b5e94-350a-49f5-aacc-20a9f910785a/api/auth/me');
+        if (!userResult || !userResult.success) {
+          window.location.href = 'login.html';
+          return;
+        }
+
+        const user = userResult.data.user;
+        document.getElementById('user-name').textContent = user.name;
+        document.getElementById('menu-user-name').textContent = user.name;
+        document.getElementById('menu-user-email').textContent = user.email;
+        document.getElementById('user-avatar').textContent = user.name.charAt(0).toUpperCase();
+
+        // Get analytics
+        const analyticsResult = await apiGet('/apps/6d4b5e94-350a-49f5-aacc-20a9f910785a/api/analytics');
+        if (analyticsResult && analyticsResult.success) {
+          const analytics = analyticsResult.data;
+          document.getElementById('stat-items').textContent = analytics.itemCount || 0;
+          document.getElementById('stat-outfits').textContent = analytics.outfitCount || 0;
+          document.getElementById('stat-saved').textContent = analytics.savedLookCount || 0;
+          document.getElementById('stat-categories').textContent = analytics.categoryCounts?.length || 0;
+        }
+
+        // Get recent outfits
+        const outfitsResult = await apiGet('/apps/6d4b5e94-350a-49f5-aacc-20a9f910785a/api/outfits');
+        if (outfitsResult && outfitsResult.success) {
+          renderOutfitCarousel(outfitsResult.data.outfits);
+        }
+      } catch (error) {
+        console.error('Failed to load dashboard data:', error);
+        showToast('Failed to load data', 'error');
+      }
+    }
+
+    function renderOutfitCarousel(outfits) {
+      const carousel = document.getElementById('outfit-carousel');
+      
+      if (!outfits || outfits.length === 0) {
+        carousel.innerHTML = `
+          <div class="flex-shrink-0 w-full flex flex-col items-center justify-center py-12 px-4 animate-fade-in">
+            <div class="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-4">
+              <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-slate-900 dark:text-white">No outfits yet</h3>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mt-1 text-center max-w-sm">Create your first outfit in the Outfit Studio</p>
+            <a href="outfit-studio.html" class="mt-4 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg shadow-sm hover:shadow transition-all active:scale-95">
+              Create Outfit
+            </a>
+          </div>
+        `;
+        return;
+      }
+
+      carousel.innerHTML = outfits.slice(0, 6).map((outfit, index) => `
+        <div class="flex-shrink-0 w-72 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden hover:shadow-md hover:border-primary-300 dark:hover:border-primary-700 transition-all duration-200 cursor-pointer animate-slide-left" style="animation-delay: ${index * 0.1}s" onclick="window.location.href='outfit-studio.html'">
+          <div class="h-48 bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 relative overflow-hidden">
+            ${outfit.preview_data ? `<img src="${outfit.preview_data}" class="w-full h-full object-cover">` : `
+              <div class="absolute inset-0 flex items-center justify-center">
+                <div class="flex gap-2">
+                  ${outfit.items_json && outfit.items_json.length > 0 ? outfit.items_json.slice(0, 3).map((itemId, i) => `
+                    <div class="w-16 h-16 rounded-lg bg-white dark:bg-slate-700 shadow-md flex items-center justify-center text-2xl font-bold text-slate-300 dark:text-slate-600">
+                      ${i + 1}
+                    </div>
+                  `).join('') : `
+                    <div class="w-16 h-16 rounded-lg bg-white dark:bg-slate-700 shadow-md flex items-center justify-center">
+                      <svg class="w-8 h-8 text-slate-300 dark:text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                      </svg>
+                    </div>
+                  `}
+                </div>
+              </div>
+            `}
+            <div class="absolute top-2 right-2">
+              <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-white/90 dark:bg-slate-900/90 text-slate-700 dark:text-slate-300 backdrop-blur-sm">
+                ${outfit.items_json ? outfit.items_json.length : 0} items
+              </span>
+            </div>
+          </div>
+          <div class="p-4">
+            <h3 class="font-semibold text-slate-900 dark:text-white truncate">${outfit.name}</h3>
+            <div class="flex items-center gap-2 mt-2">
+              ${outfit.occasion ? `
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-primary-100 dark:bg-primary-950 text-primary-700 dark:text-primary-300">
+                  ${outfit.occasion}
+                </span>
+              ` : ''}
+              ${outfit.weather ? `
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-accent-100 dark:bg-accent-950 text-accent-700 dark:text-accent-300">
+                  ${outfit.weather}
+                </span>
+              ` : ''}
+            </div>
+            <p class="text-xs text-slate-400 mt-2">${new Date(outfit.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      const token = getToken();
+      if (!token) {
+        window.location.href = 'login.html';
+        return;
+      }
+      loadDashboardData();
+    });
+  </script>
+</body>
+</html>
